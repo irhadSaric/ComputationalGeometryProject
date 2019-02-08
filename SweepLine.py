@@ -38,29 +38,51 @@ def getIntersectionsn2(flightsList: list) -> list:
                 lista.add(flightsList[j])
     return lista
 
-flightList = []
-for i in range (0, 1000):
-    randx = random.randint(0, 500)
-    randy = random.randint(0, 500)
-    randx2 = random.randint(0, 500)
-    randy2 = random.randint(0, 500)
-    randz = random.randint(100, 400)
-    randz2 = random.randint(100, 400)
-    v1 = random.randint(1, 5)
-    newFlight = Flight(Point(randx, randy, randz), Point(randx2, randy2, randz2), v1)
-    flightList.append(newFlight)
+def testWhichOneIsBetter(numberOfRandomCombinations, numberOfFlights):
+    flightList = []
+    boljiMoj, boljiKvadratni = 0, 0
+    sumBolji, sumGori = 0.0, 0.0
+    sumKadJeBolji, sumKadJeGori = 0.0, 0.0
+    width = 800
+    height = 600
+    for j in range(0, numberOfRandomCombinations):
+        flightList = []
+        sumBolji, sumGori = 0.0, 0.0
+        for i in range(0, numberOfFlights):
+            randx = random.randint(0, width)
+            randy = random.randint(0, height)
+            randx2 = random.randint(0, width)
+            randy2 = random.randint(0, height)
+            randz = random.randint(0, 100)
+            randz2 = random.randint(0, 100)
+            v1 = random.randint(1, 5)
+            newFlight = Flight(Point(randx, randy, randz), Point(randx2, randy2, randz2), v1)
+            flightList.append(newFlight)
+
+        startTime = time.process_time()
+        getIntersections(flightList)
+        zavrsno1 = time.process_time() - startTime
+        # print(zavrsno1, end=", ")
+
+        startTime = time.process_time()
+        getIntersectionsn2(flightList)
+        zavrsno2 = time.process_time() - startTime
+        # print(zavrsno2)
+
+        if zavrsno1 <= zavrsno2:
+            boljiMoj += 1
+            sumBolji += abs(zavrsno1-zavrsno2)
+            sumKadJeBolji += sumBolji
+        else:
+            boljiKvadratni += 1
+            sumGori += abs(zavrsno1 - zavrsno2)
+            sumKadJeGori += sumGori
+
+    print("Za ", numberOfFlights, " aviona i ", numberOfRandomCombinations, " random kombinacija \nmoj:", boljiMoj, ", n2:",
+          boljiKvadratni, "usteda: ", sumKadJeBolji-sumKadJeGori, ", bolji u prosjeku za: ", sumKadJeBolji/boljiMoj,
+          ", gori u prosjeku: ", sumKadJeGori/boljiKvadratni)
 
 
-
-startTime = time.time()
-print("Pocetno za kvadratno", startTime)
-print(getIntersectionsn2(flightList))
-print("Krajnje za kvadratno", time.time() - startTime)
-print("---------")
-
-startTime = time.time()
-print("Pocetno za mozda nlogn", startTime)
-print(getIntersections(flightList))
-print("Krajnje za mozda nlogn", time.time() - startTime)
-print("---------")
-
+testWhichOneIsBetter(5000, 20)
+testWhichOneIsBetter(500, 200)
+testWhichOneIsBetter(20, 5000)
