@@ -1,4 +1,5 @@
 import random
+import time
 from queue import PriorityQueue
 from collections import deque
 from Point import *
@@ -28,9 +29,21 @@ def getIntersections(flightsList: list) -> list:
 
     return listOfIntersections
 
-"""
+def getIntersectionsn2(flightsList: list) -> list:
+    lista = set()
+    for i in range(0, len(flightsList)):
+        for j in range(i+1, len(flightsList)):
+            if Flight.intersects(flightsList[i], flightsList[j]):
+                lista.add(flightsList[i])
+                lista.add(flightsList[j])
+    return lista
+
+def sortiraj(flightList: list) -> list:
+    return sorted(flightList)
+
+
 flightList = []
-for i in range (0, 100):
+for i in range (0, 1000):
     randx = random.randint(0, 500)
     randy = random.randint(0, 500)
     randx2 = random.randint(0, 500)
@@ -41,5 +54,17 @@ for i in range (0, 100):
     newFlight = Flight(Point(randx, randy, randz), Point(randx2, randy2, randz2), v1)
     flightList.append(newFlight)
 
+
+
+startTime = time.time()
+print("Pocetno za kvadratno", startTime)
+print(getIntersectionsn2(flightList))
+print("Krajnje za kvadratno", time.time() - startTime)
+print("---------")
+
+startTime = time.time()
+print("Pocetno za mozda nlogn", startTime)
 print(getIntersections(flightList))
-"""
+print("Krajnje za mozda nlogn", time.time() - startTime)
+print("---------")
+
