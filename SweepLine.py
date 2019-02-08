@@ -38,10 +38,6 @@ def getIntersectionsn2(flightsList: list) -> list:
                 lista.add(flightsList[j])
     return lista
 
-def sortiraj(flightList: list) -> list:
-    return sorted(flightList)
-
-
 flightList = []
 for i in range (0, 1000):
     randx = random.randint(0, 500)
