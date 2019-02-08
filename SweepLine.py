@@ -83,6 +83,6 @@ def testWhichOneIsBetter(numberOfRandomCombinations, numberOfFlights):
           ", gori u prosjeku: ", sumKadJeGori/boljiKvadratni)
 
 
-testWhichOneIsBetter(5000, 20)
-testWhichOneIsBetter(500, 200)
-testWhichOneIsBetter(20, 5000)
+#testWhichOneIsBetter(5000, 20)
+#testWhichOneIsBetter(500, 200)
+testWhichOneIsBetter(500, 1000)#20,5000
