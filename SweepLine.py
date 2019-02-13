@@ -106,6 +106,8 @@ def getIntersectionsImprovedv3(flightsList: list) -> list:
         eventPoint = priorityQueue.get()
         if eventPoint.eventType == "s":
             currentFlight = eventPoint.flightIdentifier
+            tree.insert(currentFlight)
+
             prevFlight = tree.get_prev(currentFlight)
             while prevFlight != None:
                 if Flight.intersects(currentFlight, prevFlight):
@@ -119,8 +121,6 @@ def getIntersectionsImprovedv3(flightsList: list) -> list:
                     listOfIntersections.add(succFlight)
                     listOfIntersections.add(currentFlight)
                 succFlight = tree.get_succ(succFlight)
-
-            tree.insert(currentFlight)
         else:
             currentFlight = eventPoint.flightIdentifier
             tree.remove(currentFlight)

@@ -277,6 +277,7 @@ class AVLTree():
                 node = node.parent
         return retlst
 
+
     def preorder(self, node, retlst=None):
         if retlst is None:
             retlst = []
