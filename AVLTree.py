@@ -494,16 +494,20 @@ class AVLTree():
             return None
 
         node = self.find(node)
-        if node.rightChild != None:
-            return self.find_smallest(node.rightChild)
+        if node != None:
+            if node.rightChild != None:
+                node = self.find_smallest(node.rightChild)
+                return node.key
 
-        y = node.parent
-        x = node
+            y = node.parent
+            x = node
 
-        while y != None and x == y.rightChild:
-            x = y
-            y = y.parent
-        return y
+            while y != None and x == y.rightChild:
+                x = y
+                y = y.parent
+            if y != None:
+                return y.key
+        return None
 
     def get_prev(self, node):
         if (node == None):
@@ -512,15 +516,18 @@ class AVLTree():
         #print("IDUPM1", node)
         node = self.find(node)
         #print("IDUPM", node)
-        if node.leftChild != None:
-            return self.find_biggest(node.leftChild)
+        if node != None:
+            if node.leftChild != None:
+                return self.find_biggest(node.leftChild).key
 
-        y = node.parent
-        x = node
-        while y != None and x == y.leftChild:
-            x = y
-            y = y.parent
-        return y
+            y = node.parent
+            x = node
+            while y != None and x == y.leftChild:
+                x = y
+                y = y.parent
+            if y != None:
+                return y.key
+        return None
 
     def set_value(self, key, value):
         node = self.find(key.key)
