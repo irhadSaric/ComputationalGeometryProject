@@ -1,4 +1,5 @@
 import random, math
+from Flight import *
 
 
 def random_data_generator(max_r):
@@ -276,6 +277,26 @@ class AVLTree():
                     node = node.parent
                 node = node.parent
         return retlst
+
+    def inorder_check(self, currentFlight: 'Flight', intersectionsSet: set) -> set:
+        node = self.rootNode
+        while node.leftChild:
+            node = node.leftChild
+        while (node):
+            if node.key != currentFlight:
+                if Flight.intersects(node.key, currentFlight):
+                    intersectionsSet.add(node.key)
+                    intersectionsSet.add(currentFlight)
+
+            if (node.rightChild):
+                node = node.rightChild
+                while node.leftChild:
+                    node = node.leftChild
+            else:
+                while ((node.parent) and (node == node.parent.rightChild)):
+                    node = node.parent
+                node = node.parent
+        return intersectionsSet
 
 
     def preorder(self, node, retlst=None):

@@ -132,7 +132,7 @@ while running:
         flightList.append(newFlight)
         startTime = currentTime
 
-    intersections = getIntersectionsImprovedv3(flightList)
+    intersections = getIntersectionsTry(flightList)
 
     color = black
     for flight in flightList:
