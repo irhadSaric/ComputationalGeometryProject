@@ -31,6 +31,9 @@ class Point:
                                                                                 self.y == other.y and
                                                                                 self.z > other.z)
 
+    def __sub__(self, other: 'Point'):
+        return Point(self.x - other.x, self.y - other.y, self.z - other.z)
+
     def euclidean_distance(self, b: 'Point') -> float:
         return sqrt((b.x - self.x)**2 + (b.y - self.y)**2 + (b.z - self.z)**2)
 

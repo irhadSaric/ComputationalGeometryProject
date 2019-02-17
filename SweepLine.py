@@ -49,6 +49,52 @@ def getIntersectionsTry(flightsList: list) -> list:
         eventPoint = priorityQueue.get()
         if eventPoint.eventType == "s":
             currentFlight = eventPoint.flightIdentifier
+            i = 0
+            j = -1
+            if Deque.__len__() >= 1:
+                while i != Deque.__len__() and currentFlight.currentPosition.y + 50 > Deque[i].currentPosition.y - 50:
+                    if Flight.intersects(currentFlight, Deque[i]):
+                        listOfIntersections.add(Deque[i])
+                        listOfIntersections.add(currentFlight)
+                    i += 1
+
+                while -j - 1 != Deque.__len__() and currentFlight.currentPosition.x - 50 < Deque[j].currentPosition.x + 50:
+                    if Flight.intersects(currentFlight, Deque[j]):
+                        listOfIntersections.add(Deque[j])
+                        listOfIntersections.add(currentFlight)
+                    j -= 1
+            Deque.appendleft(currentFlight)
+            """for flight in Deque:
+                if Flight.intersects(currentFlight, flight):
+                    listOfIntersections.add(flight)
+                    listOfIntersections.add(currentFlight)"""
+        else:
+            if Deque.__len__() != 0:
+                Deque.pop()
+
+    return listOfIntersections
+
+def getIntersectionsTryOptimised(flightsList: list) -> list:
+    priorityQueue = []
+    Deque = deque()
+    listOfIntersections = set()
+
+    for flight in flightsList:
+        priorityQueue.append(
+            EventPoint("s", Point(flight.currentPosition.x - 500, flight.currentPosition.y, flight.currentPosition.z),
+                       flight))
+        priorityQueue.append(
+            EventPoint("e", Point(flight.currentPosition.x + 500, flight.currentPosition.y, flight.currentPosition.z),
+                       flight))
+
+    priorityQueue.sort()
+    print(priorityQueue)
+    #priorityQueue = priorityQueue[::-1]
+
+    while len(priorityQueue) != 0:
+        eventPoint = priorityQueue[-1]
+        if eventPoint.eventType == "s":
+            currentFlight = eventPoint.flightIdentifier
             Deque.appendleft(currentFlight)
             i = -1
             while Deque[i].currentPosition.y - 50 < currentFlight.currentPosition.y + 50 and -i != Deque.__len__()\
@@ -64,9 +110,9 @@ def getIntersectionsTry(flightsList: list) -> list:
         else:
             if Deque.__len__() != 0:
                 Deque.popleft()
+        del priorityQueue[-1]
 
     return listOfIntersections
-
 
 def getIntersectionsImproved(flightsList: list) -> list:
     priorityQueue = []
@@ -242,7 +288,8 @@ def testWhichOneIsBetter(numberOfRandomCombinations, numberOfFlights):
 #testWhichOneIsBetter(5000, 20)
 #testWhichOneIsBetter(500, 200)
 #testWhichOneIsBetter(20, 5000)
-"""width = 800
+"""
+width = 800
 height = 600
 for j in range(0, 200):
     flightList = []
@@ -257,21 +304,15 @@ for j in range(0, 200):
         v1 = random.randint(1, 5)
         newFlight = Flight(Point(randx, randy, randz), Point(randx2, randy2, randz2), v1)
         flightList.append(newFlight)
-"""
-"""startTime = time.process_time()
-    getIntersectionsn2(flightList)
-    zavrsno1 = time.process_time() - startTime
-    print(zavrsno1, end=", ")"""
-"""
     startTime = time.process_time()
-    getIntersectionsTry(flightList)
+    getIntersectionsTryOptimised(flightList)
     zavrsno1 = time.process_time() - startTime
     print(zavrsno1, end=", ")
     startTime = time.process_time()
-    getIntersections(flightList)
+    getIntersectionsTry(flightList)
     zavrsno1 = time.process_time() - startTime
     print(zavrsno1)
-    """
+"""
 """
     startTime = time.process_time()
     getIntersectionsImprovedv4(flightList)
