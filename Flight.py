@@ -21,7 +21,6 @@ class Flight:
                                                                                 self.currentPosition.y == other.currentPosition.y and
                                                                                 self.currentPosition.z > other.currentPosition.z)
 
-
     def calculateCurrentPosition(self):
         distanceBetweenStartAndEnd = self.start.euclidean_distance_3D(self.end)
         timeToGoAtoB = distanceBetweenStartAndEnd / self.velocity

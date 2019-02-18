@@ -71,7 +71,7 @@ def generateFlight(poly: list, lower: int, upper: int, flightType: str) -> 'Flig
         enterPoint = poly[randomEdgeEnter].getRandomPoint(lower, upper, flightType)
         exitPoint = poly[randomEdgeExit].getRandomPoint(lower, upper, flightType)
 
-        v = random.randint(1, 1)
+        v = random.randint(1, 5)
         return Flight(enterPoint, exitPoint, v, flightType, [Segment(enterPoint, exitPoint)])
     elif flightType == "internal":
         randomEnterPoint = getRandomPoint(poly, lower)
@@ -82,7 +82,7 @@ def generateFlight(poly: list, lower: int, upper: int, flightType: str) -> 'Flig
         segment2 = Segment(randomPoint1, randomPoint2)
         segment3 = Segment(randomPoint2, randomExitPoint)
 
-        v = random.randint(1, 1)
+        v = random.randint(1, 5)
         return Flight(randomEnterPoint, randomPoint1, v, "internal", [segment1, segment2, segment3])
     elif flightType == "half-internal":
         randNum = random.randint(1, 2)
@@ -95,7 +95,7 @@ def generateFlight(poly: list, lower: int, upper: int, flightType: str) -> 'Flig
             exitPoint = getRandomPoint(poly, lower)
             segment1 = Segment(enterPoint, randomPoint)
             segment2 = Segment(randomPoint, exitPoint)
-            v = random.randint(1, 1)
+            v = random.randint(1, 5)
             return Flight(enterPoint, randomPoint, v, "half-internal", [segment1, segment2])
         else:
             #penje se i izlazi
@@ -105,10 +105,12 @@ def generateFlight(poly: list, lower: int, upper: int, flightType: str) -> 'Flig
             exitPoint = getRandomPoint(poly, lower)
             segment1 = Segment(enterPoint, randomPoint)
             segment2 = Segment(randomPoint, exitPoint)
-            v = random.randint(1, 1)
+            v = random.randint(1, 5)
             return Flight(enterPoint, randomPoint, v, "half-internal", [segment1, segment2])
 
 pygame.init()
+pygame.font.init()
+myfont = pygame.font.SysFont('Comic Sans MS', 10)
 width = 800
 height = 600
 
@@ -126,17 +128,6 @@ purple = (80, 0, 160)
 xPositionRect = 20
 yPositionRect = 20
 running = True
-"""
-x1 = 10
-y1 = 50
-z1 = 100
-startingPoint = Point(x1, y1, z1)
-x2 = 110
-y2 = 150
-z2 = 150
-endingPoint = Point(x2, y2, z2)
-f1 = Flight(startingPoint, endingPoint, 1.0)
-"""
 flightList = []
 
 inputListPoly = []
@@ -204,18 +195,6 @@ while running:
 
     intersections = []
     currentTime = time.time()
-    """
-    if currentTime - startTime >= 1:
-        randx = random.randint(0, width)
-        randy = random.randint(0, height)
-        randx2 = random.randint(0, width)
-        randy2 = random.randint(0, height)
-        randz = random.randint(100, 100)
-        randz2 = random.randint(100, 100)
-        v1 = random.randint(1, 1)
-        newFlight = Flight(Point(randx, randy, randz), Point(randx2, randy2, randz2), v1)
-        flightList.append(newFlight)
-        startTime = currentTime"""
     if currentTime - startTime >= 1:
         flightType = random.randint(1, 3)
         if flightType == 3:
@@ -239,14 +218,14 @@ while running:
             if flight.flightType == "half-internal":
                 color = brown
         #print(flight.start.x, flight.start.y, flight.end.x, flight.end.y, len(flightList))
-        if flight.currentPosition.x == flight.end.x and flight.currentPosition.y == flight.end.y:
+        if abs(flight.currentPosition.x - flight.path[-1].end.x) <= flight.velocity and abs(flight.currentPosition.y - flight.path[-1].end.y) <= flight.velocity:
             if flight.flightType == "external":
                 pygame.draw.rect(screen, blue, (flight.currentPosition.x, flight.currentPosition.y, 5, 5))
                 pygame.draw.circle(screen, blue, (int(flight.currentPosition.x), int(flight.currentPosition.y)), 50, 1)
                 pygame.draw.line(screen, green, (flight.start.x, flight.start.y), (flight.end.x, flight.end.y))
                 flightList.remove(flight)
             else:
-                if abs(flight.currentPosition.x - flight.path[-1].end.x) < 1 and abs(flight.currentPosition.y - flight.path[-1].end.y) < 1:
+                if abs(flight.currentPosition.x - flight.path[-1].end.x) <= flight.velocity and abs(flight.currentPosition.y - flight.path[-1].end.y) <= flight.velocity:
                     pygame.draw.rect(screen, blue, (flight.currentPosition.x, flight.currentPosition.y, 5, 5))
                     pygame.draw.circle(screen, blue, (int(flight.currentPosition.x), int(flight.currentPosition.y)), 50,
                                        1)
@@ -254,20 +233,22 @@ while running:
                     flightList.remove(flight)
                 else:
                     if flight.flightType == "internal":
-                        if abs(flight.currentPosition.x - flight.path[1].start.x) < 1 and abs(flight.currentPosition.y - flight.path[1].start.y) < 1:
+                        if abs(flight.currentPosition.x - flight.path[1].start.x) <= flight.velocity and abs(flight.currentPosition.y - flight.path[1].start.y) <= flight.velocity:
                             #print("Uso")
                             flight.start = flight.path[1].start
                             flight.end = flight.path[1].end
-                        if abs(flight.currentPosition.x - flight.path[2].start.x) < 1 and abs(flight.currentPosition.y - flight.path[2].start.y) < 1:
+                        if abs(flight.currentPosition.x - flight.path[2].start.x) <= flight.velocity and abs(flight.currentPosition.y - flight.path[2].start.y) <= flight.velocity:
                             flight.start = flight.path[2].start
                             flight.end = flight.path[2].end
                     if flight.flightType == "half-internal":
-                        if abs(flight.currentPosition.x - flight.path[1].start.x) < 1 and abs(flight.currentPosition.y - flight.path[1].start.y) < 1:
+                        if abs(flight.currentPosition.x - flight.path[1].start.x) < flight.velocity and abs(flight.currentPosition.y - flight.path[1].start.y) < flight.velocity:
                             flight.start = flight.path[1].start
                             flight.end = flight.path[1].end
         else:
             #pygame.draw.line(screen, green, (flight.start.x, flight.start.y), (flight.end.x, flight.end.y))
-            pygame.draw.rect(screen, color, (flight.currentPosition.x, flight.currentPosition.y - 2.5, 5, 5))
+            textsurface = myfont.render("("+str(round(flight.currentPosition.x))+","+str(round(flight.currentPosition.y))+","+str(round(flight.currentPosition.z))+")", False, (0, 0, 0))
+            screen.blit(textsurface, (flight.currentPosition.x-25, flight.currentPosition.y))
+            #pygame.draw.rect(screen, color, (flight.currentPosition.x, flight.currentPosition.y - 2.5, 5, 5))
             pygame.draw.circle(screen, color, (int(flight.currentPosition.x), int(flight.currentPosition.y)), 50, 1)
 
         """--------------------------------------------------------------------------------------------------------"""
@@ -279,25 +260,27 @@ while running:
                 pygame.draw.rect(screen, blue, (flight.currentPosition.x, flight.currentPosition.y, 5, 5))
                 pygame.draw.circle(screen, blue, (int(flight.currentPosition.x), int(flight.currentPosition.y)), 50, 1)
                 pygame.draw.line(screen, green, (flight.start.x, flight.start.y), (flight.end.x, flight.end.y))
-                flightList.remove(flight)
+                if flight in flightList:
+                    flightList.remove(flight)
             else:
-                if abs(flight.currentPosition.x - flight.path[-1].end.x) < 1 and abs(flight.currentPosition.y - flight.path[-1].end.y) < 1:
+                if abs(flight.currentPosition.x - flight.path[-1].end.x) <= flight.velocity and abs(flight.currentPosition.y - flight.path[-1].end.y) <= flight.velocity:
                     pygame.draw.rect(screen, blue, (flight.currentPosition.x, flight.currentPosition.y, 5, 5))
                     pygame.draw.circle(screen, blue, (int(flight.currentPosition.x), int(flight.currentPosition.y)), 50,
                                        1)
                     pygame.draw.line(screen, green, (flight.start.x, flight.start.y), (flight.end.x, flight.end.y))
-                    flightList.remove(flight)
+                    if flight in flightList:
+                        flightList.remove(flight)
                 else:
                     if flight.flightType == "internal":
-                        if abs(flight.currentPosition.x - flight.path[1].start.x) < 1 and abs(flight.currentPosition.y - flight.path[1].start.y) < 1:
+                        if abs(flight.currentPosition.x - flight.path[1].start.x) <= flight.velocity and abs(flight.currentPosition.y - flight.path[1].start.y) <= flight.velocity:
                             print("Uso")
                             flight.start = flight.path[1].start
                             flight.end = flight.path[1].end
-                        if abs(flight.currentPosition.x - flight.path[2].start.x) < 1 and abs(flight.currentPosition.y - flight.path[2].start.y) < 1:
+                        if abs(flight.currentPosition.x - flight.path[2].start.x) <= flight.velocity and abs(flight.currentPosition.y - flight.path[2].start.y) <= flight.velocity:
                             flight.start = flight.path[2].start
                             flight.end = flight.path[2].end
                     if flight.flightType == "half-internal":
-                        if abs(flight.currentPosition.x - flight.path[1].start.x) < 1 and abs(flight.currentPosition.y - flight.path[1].start.y) < 1:
+                        if abs(flight.currentPosition.x - flight.path[1].start.x) <= flight.velocity and abs(flight.currentPosition.y - flight.path[1].start.y) <= flight.velocity:
                             flight.start = flight.path[1].start
                             flight.end = flight.path[1].end
     clock.tick(10)

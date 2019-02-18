@@ -64,10 +64,6 @@ def getIntersectionsTry(flightsList: list) -> list:
                         listOfIntersections.add(currentFlight)
                     j -= 1
             Deque.appendleft(currentFlight)
-            """for flight in Deque:
-                if Flight.intersects(currentFlight, flight):
-                    listOfIntersections.add(flight)
-                    listOfIntersections.add(currentFlight)"""
         else:
             if Deque.__len__() != 0:
                 Deque.pop()
@@ -288,9 +284,11 @@ def testWhichOneIsBetter(numberOfRandomCombinations, numberOfFlights):
 #testWhichOneIsBetter(5000, 20)
 #testWhichOneIsBetter(500, 200)
 #testWhichOneIsBetter(20, 5000)
-"""
+
+
 width = 800
 height = 600
+from Segment import *
 for j in range(0, 200):
     flightList = []
     sumBolji, sumGori = 0.0, 0.0
@@ -302,17 +300,16 @@ for j in range(0, 200):
         randz = random.randint(0, 50)
         randz2 = random.randint(0, 100)
         v1 = random.randint(1, 5)
-        newFlight = Flight(Point(randx, randy, randz), Point(randx2, randy2, randz2), v1)
+        newFlight = Flight(Point(randx, randy, randz), Point(randx2, randy2, randz2), v1, "external", [Segment(Point(randx, randy, randz), Point(randx2, randy2, randz2))])
         flightList.append(newFlight)
     startTime = time.process_time()
-    getIntersectionsTryOptimised(flightList)
+    getIntersections(flightList)
     zavrsno1 = time.process_time() - startTime
     print(zavrsno1, end=", ")
     startTime = time.process_time()
     getIntersectionsTry(flightList)
     zavrsno1 = time.process_time() - startTime
     print(zavrsno1)
-"""
 """
     startTime = time.process_time()
     getIntersectionsImprovedv4(flightList)
