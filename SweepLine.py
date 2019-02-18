@@ -285,7 +285,7 @@ def testWhichOneIsBetter(numberOfRandomCombinations, numberOfFlights):
 #testWhichOneIsBetter(500, 200)
 #testWhichOneIsBetter(20, 5000)
 
-
+"""
 width = 800
 height = 600
 from Segment import *
@@ -310,6 +310,7 @@ for j in range(0, 200):
     getIntersectionsTry(flightList)
     zavrsno1 = time.process_time() - startTime
     print(zavrsno1)
+"""
 """
     startTime = time.process_time()
     getIntersectionsImprovedv4(flightList)
