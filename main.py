@@ -86,8 +86,8 @@ poly = Polygon(inputListPoly, lowerLimit, upperLimit)
 100
 100
 1
-5
-25
+1
+40
 """
 startTime = time.time()
 while running:
@@ -98,7 +98,7 @@ while running:
 
     intersections = []
     currentTime = time.time()
-    if currentTime - startTime >= 0.25:
+    if currentTime - startTime >= 1:
         flightType = random.randint(1, 3)
         if flightType == 3:
             newFlight = Flight.generateFlight(poly, lowerVelocity, upperVelocity, "external", closeRange)
@@ -115,7 +115,7 @@ while running:
         else:
             flight.outsidePoly = True
 
-    intersections = getIntersectionsTry(flightList)
+    intersections = getIntersections(flightList)
 
     poly.draw(screen)
     Flight.draw(flightList, pygame, screen, intersections, myfont)

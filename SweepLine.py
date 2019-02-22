@@ -30,41 +30,6 @@ def getIntersections(flightsList: list) -> set:
 
     return listOfIntersections
 
-def getIntersectionsTry(flightsList: list) -> set:
-    from AVLTree import AVLTree
-    priorityQueue = PriorityQueue()
-    tree = AVLTree()
-    listOfIntersections = set()
-
-    for flight in flightsList:
-        priorityQueue.put(
-            EventPoint("s", Point(flight.currentPosition.x - flight.closeRange, flight.currentPosition.y, flight.currentPosition.z),
-                       flight))
-        priorityQueue.put(
-            EventPoint("e", Point(flight.currentPosition.x + flight.closeRange, flight.currentPosition.y, flight.currentPosition.z),
-                       flight))
-
-    while not priorityQueue.empty() != 0:
-        eventPoint = priorityQueue.get()
-        if eventPoint.eventType == "s":
-            currentFlight = eventPoint.flightIdentifier
-            tree.insert(currentFlight)
-            prevFlight = tree.get_prev(currentFlight)
-            while prevFlight != None and Flight.intersects(currentFlight, prevFlight) and not currentFlight.outsidePoly and not prevFlight.outsidePoly:
-                listOfIntersections.add(prevFlight)
-                listOfIntersections.add(currentFlight)
-                prevFlight = tree.get_prev(prevFlight)
-
-            succFlight = tree.get_succ(currentFlight)
-            while succFlight != None and Flight.intersects(currentFlight, succFlight) and not currentFlight.outsidePoly and not succFlight.outsidePoly:
-                listOfIntersections.add(succFlight)
-                listOfIntersections.add(currentFlight)
-                succFlight = tree.get_succ(succFlight)
-        else:
-            currentFlight = eventPoint.flightIdentifier
-            tree.remove(currentFlight)
-    return listOfIntersections
-
 def getIntersectionsn2(flightsList: list) -> list:
     lista = set()
     for i in range(0, len(flightsList)):
@@ -90,14 +55,23 @@ for j in range(0, 200):
         randz = random.randint(0, 50)
         randz2 = random.randint(0, 100)
         v1 = random.randint(1, 5)
-        newFlight = Flight(Point(randx, randy, randz), Point(randx2, randy2, randz2), v1, "external", [Segment(Point(randx, randy, randz), Point(randx2, randy2, randz2))], 50)
+        newFlight = Flight(Point(randx, randy, randz), Point(randx2, randy2, randz2), v1, "external", [Segment(Point(randx, randy, randz), Point(randx2, randy2, randz2))], 15)
         flightList.append(newFlight)
     startTime = time.process_time()
-    getIntersectionsImprovedv2(flightList)
+    lista1 = getIntersections(flightList)
     zavrsno1 = time.process_time() - startTime
     print(zavrsno1, end=", ")
     startTime = time.process_time()
-    getIntersections(flightList)
+    lista2 = getIntersectionsn2(flightList)
     zavrsno1 = time.process_time() - startTime
-    print(zavrsno1)
+    print(zavrsno1, end=", ")
+
+    counter = 0
+    for f1 in lista1:
+        if f1 in lista2:
+            counter += 1
+    if counter == len(lista1) and counter == len(lista2):
+        print("Sve")
+    else:
+        print(counter, len(lista1), len(lista2))
 """
