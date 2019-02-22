@@ -34,15 +34,15 @@ class Flight:
         timeToGoAtoB = distanceBetweenStartAndEnd / self.velocity
         distanceBetweenXCoordinates = self.end.x - self.start.x
         distanceBetweenZCoordinates = self.end.z - self.start.z
-        velocityForX = distanceBetweenXCoordinates / timeToGoAtoB
-        velocityForZ = distanceBetweenZCoordinates / timeToGoAtoB
+        changeForX = distanceBetweenXCoordinates / timeToGoAtoB
+        changeForZ = distanceBetweenZCoordinates / timeToGoAtoB
         if (abs(self.currentPosition.x - self.end.x) >= self.velocity or abs(self.currentPosition.y - self.end.y) >= self.velocity) and abs(self.currentPosition.x - self.end.x) != 0:
             m = (self.currentPosition.y - self.end.y) / (self.currentPosition.x - self.end.x)
             b = (self.currentPosition.x * self.end.y - self.end.x * self.currentPosition.y) / (self.currentPosition.x - self.end.x)
 
-            self.currentPosition.x += velocityForX
+            self.currentPosition.x += changeForX
             self.currentPosition.y = m * self.currentPosition.x + b
-            self.currentPosition.z += velocityForZ
+            self.currentPosition.z += changeForZ
         else:
             return -1
 

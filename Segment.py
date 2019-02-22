@@ -23,7 +23,7 @@ class Segment:
             y = c / b - a / b * x
 
         if flightType == "external":
-            z = random.randint(upper, upper)
+            z = random.randint(upper, upper+100)
         else:
             z = random.randint(lower, upper)
 
