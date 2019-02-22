@@ -1,4 +1,5 @@
 from Point import *
+from math import sqrt
 import random
 
 
@@ -20,7 +21,11 @@ class Segment:
             y = random.uniform(self.start.y, self.end.y)
         else:
             y = c / b - a / b * x
-        z = random.randint(upper, upper + 100)
+
+        if flightType == "external":
+            z = random.randint(upper, upper)
+        else:
+            z = random.randint(lower, upper)
 
         return Point(x, y, z)
 

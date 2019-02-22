@@ -9,33 +9,13 @@ class Point:
         self.y = y
         self.z = z
 
-    def __str__(self):
-        return repr(self)
-
-    def __repr__(self):
-        return '({}, {}, {})'.format(self.x, self.y, self.z)
-
-    def __eq__(self, other: 'Point'):
-        return (self.x == other.x) and (self.y == other.y) and (self.z == other.z)
-
-    def __ne__(self, other: 'Point'):
-        return not self.__eq__(other)
-
     def __lt__(self, other: 'Point'):
         return self.x < other.x or (self.x == other.x and self.y < other.y) or (self.x == other.x and
                                                                                 self.y == other.y and
                                                                                 self.z < other.z)
 
-    def __gt__(self, other: 'Point'):
-        return self.x > other.x or (self.x == other.x and self.y > other.y) or (self.x == other.x and
-                                                                                self.y == other.y and
-                                                                                self.z > other.z)
-
-    def __sub__(self, other: 'Point'):
+    def __sub__(self, other: 'Point') -> 'Point':
         return Point(self.x - other.x, self.y - other.y, self.z - other.z)
-
-    def euclidean_distance(self, b: 'Point') -> float:
-        return sqrt((b.x - self.x)**2 + (b.y - self.y)**2 + (b.z - self.z)**2)
 
     def euclidean_distance_2D(self, b: 'Point') -> float:
         return sqrt((b.x - self.x)**2 + (b.y - self.y)**2)
@@ -43,7 +23,7 @@ class Point:
     def euclidean_distance_3D(self, b: 'Point') -> float:
         return sqrt((b.x - self.x)**2 + (b.y - self.y)**2 + (b.z - self.z)**2)
 
-    def between2D(self, p1: 'Point', p2: 'Point'):
+    def between2D(self, p1: 'Point', p2: 'Point') -> bool:
         return min(p1.x, p2.x) <= self.x <= max(p1.x, p2.x) and min(p1.y, p2.y) <= self.y <= max(p1.y, p2.y)
 
     @staticmethod
@@ -59,16 +39,6 @@ class Point:
             return 0 # Right orientation, clockwise direction
         else:
             return -1 # Colinear points
-
-    def calculateCoordinates(self, endingPoint, velocity: float):
-        if self.x - endingPoint.x != 0:
-            m = (self.y - endingPoint.y) / (self.x - endingPoint.x)
-            b = (self.x * self.y - endingPoint.x * self.y) / (self.x - endingPoint.x)
-            self.x += velocity
-            self.y = m * self.x + b
-        else:
-            print("Izasao")
-
 
 class EventPoint(Point):
     def __init__(self, eventType: str, point: Point, flight):
