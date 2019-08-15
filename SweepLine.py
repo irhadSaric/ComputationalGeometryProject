@@ -30,6 +30,34 @@ def getIntersections(flightsList: list) -> set:
 
     return listOfIntersections
 
+def getCircleIntersections(circleList: list) -> set:
+    priorityQueue = PriorityQueue()
+    Deque = deque()
+    listOfIntersections = set()
+
+    for flight in circleList:
+        priorityQueue.put(EventPoint("s", Point(flight.currentPosition.x - flight.closeRange, flight.currentPosition.y,
+                                                flight.currentPosition.z), flight))
+        priorityQueue.put(EventPoint("e", Point(flight.currentPosition.x + flight.closeRange, flight.currentPosition.y,
+                                                flight.currentPosition.z), flight))
+
+    while not priorityQueue.empty():
+        eventPoint = priorityQueue.get()
+        if eventPoint.eventType == "s":
+            currentFlight = eventPoint.flightIdentifier
+            for flight in Deque:
+                if Flight.intersects(currentFlight,
+                                     flight) and not currentFlight.outsidePoly and not flight.outsidePoly:
+                    listOfIntersections.add(flight)
+                    listOfIntersections.add(currentFlight)
+            Deque.appendleft(currentFlight)
+        else:
+            if Deque.__len__() != 0:
+                Deque.pop()
+
+    return listOfIntersections
+
+
 def getIntersectionsn2(flightsList: list) -> list:
     lista = set()
     for i in range(0, len(flightsList)):

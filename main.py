@@ -84,9 +84,9 @@ poly = Polygon(inputListPoly, lowerLimit, upperLimit)
 
 
 100
-100
+500
 1
-1
+5
 40
 """
 startTime = time.time()
